@@ -21,8 +21,18 @@ class CookieManager {
   public function setCookie($name, $value, $expire = 0) {
     setcookie($name, $value, $expire, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
     if ($this->cookieSameSite !== '') {
-      setcookie($name.'_sameSite', $this->cookieSameSite, $expire, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, true);
+      setcookie($name, $value, [
+        'expires' => $expire,
+        'path' => $this->cookiePath,
+        'domain' => $this->cookieDomain,
+        'secure' => $this->cookieSecure,
+        'httponly' => $this->cookieHttpOnly,
+        'samesite' => $this->cookieSameSite
+      ]);
     }
+    // if ($this->cookieSameSite !== '') {
+    //   setcookie($name.'_sameSite', $this->'None', $expire, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, true);
+    // }
   }
 
   public function getCookie($name) {
