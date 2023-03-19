@@ -30,11 +30,12 @@ class TrackerAPI
             ]
         ];
 
+        if (isset($contactId)) {
+            $body["form_fields"]['_contact_id'] = $contactId;
+        }
         foreach ($data as $key => $value) {
             if ($key == 'page_url' || $key == 'page_title') {
                 $body[$key] = $value;
-            } else if (isset($contactId)) {
-                $body["form_fields"]['_contact_id'] = $contactId;
             } else {
                 $body["form_fields"][$key] = $value;
             }
