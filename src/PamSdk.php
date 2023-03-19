@@ -18,8 +18,8 @@ class PamSdk
 
     }
     
-    public function postTracker($event, $databaseAlias, $data)
+    public function postTracker($cookieDomain, $event, $databaseAlias, $data)
     {
-        return $this->trackerAPI->postTracker($event, $databaseAlias, $data);
+        return $this->trackerAPI->postTracker($cookieDomain, $event, $databaseAlias, $data);
     }
 }

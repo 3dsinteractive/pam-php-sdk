@@ -3,6 +3,7 @@
 namespace Pam\api;
 
 require_once 'RestAPIClient.php';
+require_once dirname(__FILE__) . '/../cookies/CookieManager.php';
 
 class TrackerAPI
 {
@@ -15,10 +16,14 @@ class TrackerAPI
        
     }
     
-    public function postTracker($event, $databaseAlias, $data)
+    public function postTracker($cookieDomain, $event, $databaseAlias, $data)
     {
+        $cookieManager = "Pam\\cookies\\CookieManager";
+        $cm = new $cookieManager($cookieDomain, true, true, 'None');
+        $contactId = $cm->getCookie("contact_id");
+
         $body = [
-            "event"=>$event,
+            "event" => $event,
             "platform" => "Pam PHP SDK",
             "form_fields" => [
                 "_database"=> $databaseAlias,
@@ -26,7 +31,13 @@ class TrackerAPI
         ];
 
         foreach ($data as $key => $value) {
-            $body["form_fields"][$key] = $value;
+            if ($key == 'page_url' || $key == 'page_title') {
+                $body[$key] = $value;
+            } else if (isset($contactId)) {
+                $body["form_fields"]['_contact_id'] = $contactId;
+            } else {
+                $body["form_fields"][$key] = $value;
+            }
         }
 
         $url = "$this->pamEndpoint/trackers/events";
@@ -37,6 +48,9 @@ class TrackerAPI
         $restClient = new RestClient($url, $headers, 'POST', $jsonString);
         $response = $restClient->sendRequest();
         $jsonResponse = json_decode($response);
+        if (isset($jsonResponse->contact_id)) {
+            $cm->setCookie("contact_id", $jsonResponse->contact_id);
+        }
         return $jsonResponse;
     }
 }
