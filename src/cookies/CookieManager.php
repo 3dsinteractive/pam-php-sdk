@@ -19,7 +19,6 @@ class CookieManager {
   }
 
   public function setCookie($name, $value, $expire = 0) {
-    setcookie($name, $value, $expire, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
     if ($this->cookieSameSite !== '') {
       setcookie($name, $value, [
         'expires' => $expire,
@@ -29,10 +28,9 @@ class CookieManager {
         'httponly' => $this->cookieHttpOnly,
         'samesite' => $this->cookieSameSite
       ]);
+    } else {
+      setcookie($name, $value, $expire, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
     }
-    // if ($this->cookieSameSite !== '') {
-    //   setcookie($name.'_sameSite', $this->'None', $expire, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, true);
-    // }
   }
 
   public function getCookie($name) {
@@ -40,8 +38,20 @@ class CookieManager {
   }
 
   public function deleteCookie($name) {
-    setcookie($name, '', time()-3600, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
-    setcookie($name.'_sameSite', '', time()-3600, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, true);
+    if (isset($_COOKIE[$name])) {
+      unset($_COOKIE[$name]);
+      if ($this->cookieSameSite !== '') {
+        setcookie($name, '', [
+          'expires' => time() - 3600,
+          'path' => $this->cookiePath,
+          'domain' => $this->cookieDomain,
+          'secure' => $this->cookieSecure,
+          'httponly' => $this->cookieHttpOnly,
+          'samesite' => $this->cookieSameSite
+        ]);
+      } else {
+        setcookie($name, '', time()-3600, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
+      }
+    }
   }
-
 }
