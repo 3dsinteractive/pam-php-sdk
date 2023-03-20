@@ -8,18 +8,19 @@ require_once dirname(__FILE__) . '/../cookies/CookieManager.php';
 class TrackerAPI
 {
     private $pamEndpoint;
+    private $frontendDomain;
     
 
-    public function __construct($pamEndpoint)
+    public function __construct($pamEndpoint, $frontendDomain = "")
     {
         $this->pamEndpoint = rtrim($pamEndpoint, '/');
-       
+        $this->frontendDomain = rtrim($frontendDomain, '/');
     }
     
-    public function postTracker($cookieDomain, $event, $databaseAlias, $data)
+    public function postTracker($event, $databaseAlias, $data)
     {
         $cookieManager = "Pam\\cookies\\CookieManager";
-        $cm = new $cookieManager($cookieDomain, true, true, 'None');
+        $cm = new $cookieManager($this->frontendDomain, true, true, 'None');
         $contactId = $cm->getCookie("contact_id");
 
         $body = [
