@@ -18,10 +18,10 @@ class CookieManager {
     $this->cookiePath = $cookiePath;
   }
 
-  public function setCookie($name, $value, $expire = 0) {
+  public function setCookie($name, $value, $days = 1825) {
     if ($this->cookieSameSite !== '') {
       setcookie($name, $value, [
-        'expires' => $expire,
+        'expires' => time() + ($days * 86400000),
         'path' => $this->cookiePath,
         'domain' => $this->cookieDomain,
         'secure' => $this->cookieSecure,
@@ -29,7 +29,7 @@ class CookieManager {
         'samesite' => $this->cookieSameSite
       ]);
     } else {
-      setcookie($name, $value, $expire, $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
+      setcookie($name, $value, time() + ($days * 86400000), $this->cookiePath, $this->cookieDomain, $this->cookieSecure, $this->cookieHttpOnly);
     }
   }
 
