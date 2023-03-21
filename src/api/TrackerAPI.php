@@ -23,7 +23,7 @@ class TrackerAPI
         $origin = "";
         $sameSite = "None";
         $cookieSecure = true;
-        $cookieHttpOnly = true;
+        $cookieHttpOnly = false;
         if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
             $origins = explode('://', $_SERVER['HTTP_ORIGIN']);
             if (sizeof($origins) > 1) {

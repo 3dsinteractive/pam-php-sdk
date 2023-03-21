@@ -7,10 +7,10 @@ class CookieManager {
   private $cookiePath = '/';
   private $cookieDomain = '';
   private $cookieSecure = false;
-  private $cookieHttpOnly = true;
+  private $cookieHttpOnly = false;
   private $cookieSameSite = 'Lax';
 
-  public function __construct($cookieDomain, $cookieSecure = false, $cookieHttpOnly = true, $cookieSameSite = 'Lax', $cookiePath = '/') {
+  public function __construct($cookieDomain, $cookieSecure = false, $cookieHttpOnly = false, $cookieSameSite = 'Lax', $cookiePath = '/') {
     $this->cookieDomain = $cookieDomain;
     $this->cookieSecure = $cookieSecure;
     $this->cookieHttpOnly = $cookieHttpOnly;
