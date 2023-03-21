@@ -1,5 +1,5 @@
 {
-  "name": "pam/pam-sdk",
+  "name": "3ds-pam/pam-sdk",
   "description": "Pam PHP SDK",
   "autoload": {
     "psr-4": {
