@@ -5,12 +5,14 @@ class RestClient {
   private $headers;
   private $method;
   private $body;
+  private $userAgent;
 
-  public function __construct($url, $headers = [], $method = 'GET', $body = '') {
+  public function __construct($url, $headers = [], $method = 'GET', $body = '', $userAgent = '') {
     $this->url = $url;
     $this->headers = $headers;
     $this->method = $method;
     $this->body = $body;
+    $this->userAgent = $userAgent;
   }
 
   public function setHeaders($headers) {
@@ -32,6 +34,7 @@ class RestClient {
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $this->body);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
+    curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
     $result = curl_exec($ch);
     curl_close($ch);
     return $result;

@@ -25,3 +25,4 @@ composer.phar
 /build/
 
 # End of https://www.toptal.com/developers/gitignore/api/phpunit,composer
+.DS_Store
