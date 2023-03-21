@@ -3,7 +3,7 @@
   "description": "Pam PHP SDK",
   "autoload": {
     "psr-4": {
-      "Pam\\PamSdk\\": "src/"
+      "Pam\\": "src/"
     }
   },
   "authors": [
