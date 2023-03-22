@@ -6,13 +6,15 @@ class RestClient {
   private $method;
   private $body;
   private $userAgent;
+  private $referer;
 
-  public function __construct($url, $headers = [], $method = 'GET', $body = '', $userAgent = '') {
+  public function __construct($url, $headers = [], $method = 'GET', $body = '', $userAgent = '', $referer = '') {
     $this->url = $url;
     $this->headers = $headers;
     $this->method = $method;
     $this->body = $body;
     $this->userAgent = $userAgent;
+    $this->referer = $referer;
   }
 
   public function setHeaders($headers) {
@@ -35,6 +37,7 @@ class RestClient {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $this->body);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
     curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+    curl_setopt($ch, CURLOPT_REFERER, $this->referer);
     $result = curl_exec($ch);
     curl_close($ch);
     return $result;

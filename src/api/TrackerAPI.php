@@ -24,6 +24,8 @@ class TrackerAPI
         $sameSite = "None";
         $cookieSecure = true;
         $cookieHttpOnly = false;
+        $referer = "";
+
         if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
             $origins = explode('://', $_SERVER['HTTP_ORIGIN']);
             if (sizeof($origins) > 1) {
@@ -51,6 +53,9 @@ class TrackerAPI
         } else {
             $body["platform"] = "Pam PHP SDK";
         }
+        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
+            $referer = $_SERVER['HTTP_REFERER'];
+        }
         if (isset($contactId)) {
             $body["form_fields"]['_contact_id'] = $contactId;
         }
@@ -75,7 +80,7 @@ class TrackerAPI
         
         $userAgent = $body["platform"];
         $jsonString = json_encode($body);
-        $restClient = new RestClient($url, $headers, 'POST', $jsonString, $userAgent);
+        $restClient = new RestClient($url, $headers, 'POST', $jsonString, $userAgent, $referer);
         $response = $restClient->sendRequest();
         $jsonResponse = json_decode($response);
         if (isset($jsonResponse->contact_id)) {
