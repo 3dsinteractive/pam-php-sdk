@@ -32,8 +32,6 @@ class TrackerAPI
                 $origin = rtrim($origins[1]);
                 $this->frontendDomain = $origin;
             }
-        } else if (array_key_exists('HTTP_HOST', $_SERVER)) {
-
         }
         if ($this->frontendDomain == "") {
             $sameSite = "Lax";
@@ -42,17 +40,17 @@ class TrackerAPI
         $contactId = $cm->getCookie("contact_id");
         $fbc = $cm->getCookie("_fbc");
         $fbp = $cm->getCookie("_fbp");
+        $url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $body = [
             "event" => $event,
+            "platform" => "PHP SDK",
+            "page_url" => $url,
             "form_fields" => [
                 "_database"=> $databaseAlias,
             ]
         ];
-
         if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
-            $body["platform"] = $_SERVER['HTTP_USER_AGENT'];
-        } else {
-            $body["platform"] = "Pam PHP SDK";
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
         }
         if (array_key_exists('HTTP_REFERER', $_SERVER)) {
             $referer = $_SERVER['HTTP_REFERER'];
@@ -80,7 +78,6 @@ class TrackerAPI
             'Content-Type: application/json'
         ];
         
-        $userAgent = $body["platform"];
         $jsonString = json_encode($body);
         $restClient = new RestClient($url, $headers, 'POST', $jsonString, $userAgent, $referer);
         $response = $restClient->sendRequest();
