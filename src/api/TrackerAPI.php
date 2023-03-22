@@ -32,8 +32,9 @@ class TrackerAPI
                 $origin = rtrim($origins[1]);
                 $this->frontendDomain = $origin;
             }
+        } else if (array_key_exists('HTTP_HOST', $_SERVER)) {
+
         }
-        echo $this->frontendDomain;
         if ($this->frontendDomain == "") {
             $sameSite = "Lax";
         }
@@ -55,6 +56,7 @@ class TrackerAPI
         }
         if (array_key_exists('HTTP_REFERER', $_SERVER)) {
             $referer = $_SERVER['HTTP_REFERER'];
+            $body["page_referrer"] = $referer;
         }
         if (isset($contactId)) {
             $body["form_fields"]['_contact_id'] = $contactId;
