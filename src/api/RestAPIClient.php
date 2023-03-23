@@ -7,14 +7,16 @@ class RestClient {
   private $body;
   private $userAgent;
   private $referer;
+  private $cookiesString;
 
-  public function __construct($url, $headers = [], $method = 'GET', $body = '', $userAgent = '', $referer = '') {
+  public function __construct($url, $headers = [], $method = 'GET', $body = '', $userAgent = '', $referer = '', $cookiesString = '') {
     $this->url = $url;
     $this->headers = $headers;
     $this->method = $method;
     $this->body = $body;
     $this->userAgent = $userAgent;
     $this->referer = $referer;
+    $this->cookiesString = $cookiesString;
   }
 
   public function setHeaders($headers) {
@@ -39,8 +41,7 @@ class RestClient {
     curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
     curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
     curl_setopt($ch, CURLOPT_REFERER, $this->referer);
-    $cookies = http_build_cookie($_COOKIE, '', ';');
-    curl_setopt($ch, CURLOPT_COOKIE, $cookies);
+    curl_setopt($ch, CURLOPT_COOKIE, $this->cookiesString);
     $result = curl_exec($ch);
     curl_close($ch);
     return $result;

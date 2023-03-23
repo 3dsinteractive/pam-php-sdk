@@ -65,4 +65,12 @@ class CookieManager {
       }
     }
   }
+
+  public function buildCookiesString() {
+    $cookiesString = '';
+    foreach ($_COOKIE as $key => $value) {
+        $cookiesString .= $key . '=' . urlencode($value) . ';';
+    }
+    return $cookiesString;
+  }
 }

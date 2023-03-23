@@ -81,7 +81,8 @@ class TrackerAPI
         ];
         
         $jsonString = json_encode($body);
-        $restClient = new RestClient($url, $headers, 'POST', $jsonString, $userAgent, $referer);
+        $cookiesString = $cm->buildCookiesString();
+        $restClient = new RestClient($url, $headers, 'POST', $jsonString, $userAgent, $referer, $cookiesString);
         $response = $restClient->sendRequest();
         $jsonResponse = json_decode($response);
         
