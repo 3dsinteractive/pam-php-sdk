@@ -54,4 +54,15 @@ class CookieManager {
       }
     }
   }
+
+  public function setCookieFromCurl($response, $days = 1825) {
+    // check if the cookie is set
+    preg_match_all('/^set-cookie:\s*([^;]*)/mi', $response, $matches);
+    foreach($matches[1] as $item) {
+      parse_str($item, $cookie);
+      foreach ($cookie as $name => $value) {
+        $this->setCookie($name, $value);
+      }
+    }
+  }
 }

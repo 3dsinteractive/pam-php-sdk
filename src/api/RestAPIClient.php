@@ -33,11 +33,14 @@ class RestClient {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $this->url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $this->body);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
     curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
     curl_setopt($ch, CURLOPT_REFERER, $this->referer);
+    $cookies = http_build_cookie($_COOKIE, '', ';');
+    curl_setopt($ch, CURLOPT_COOKIE, $cookies);
     $result = curl_exec($ch);
     curl_close($ch);
     return $result;

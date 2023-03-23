@@ -84,6 +84,8 @@ class TrackerAPI
         $restClient = new RestClient($url, $headers, 'POST', $jsonString, $userAgent, $referer);
         $response = $restClient->sendRequest();
         $jsonResponse = json_decode($response);
+        
+        $cm->setCookieFromCurl($response);
         if (isset($jsonResponse->contact_id)) {
             $cm->setCookie("contact_id", $jsonResponse->contact_id);
         }
