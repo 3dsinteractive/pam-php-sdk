@@ -8,37 +8,28 @@ require_once dirname(__FILE__) . '/../cookies/CookieManager.php';
 class TrackerAPI
 {
     private $baseApi;
-    private $frontendDomain;
     private $publicDBAlias;
     
 
-    public function __construct($baseApi, $publicDBAlias, $frontendDomain = "")
+    public function __construct($baseApi, $publicDBAlias)
     {
         $this->baseApi = rtrim($baseApi, '/');
         $this->publicDBAlias = $publicDBAlias;
-        $this->frontendDomain = rtrim($frontendDomain, '/');
     }
     
     public function postTracker($event, $data)
     {
         $cookieManager = "Pam\\cookies\\CookieManager";
-        $origin = "";
-        $sameSite = "None";
+        $host = "";
+        $sameSite = "Lax";
         $cookieSecure = true;
         $cookieHttpOnly = false;
         $referer = "";
 
-        if (array_key_exists('HTTP_ORIGIN', $_SERVER)) {
-            $origins = explode('://', $_SERVER['HTTP_ORIGIN']);
-            if (sizeof($origins) > 1) {
-                $origin = rtrim($origins[1]);
-                $this->frontendDomain = $origin;
-            }
+        if (array_key_exists('HTTP_HOST', $_SERVER)) {
+            $host = $_SERVER['HTTP_HOST'];
         }
-        if ($this->frontendDomain == "") {
-            $sameSite = "Lax";
-        }
-        $cm = new $cookieManager($this->frontendDomain, $cookieSecure, $cookieHttpOnly, $sameSite);
+        $cm = new $cookieManager($host, $cookieSecure, $cookieHttpOnly, $sameSite);
         $contactId = $cm->getCookie("contact_id");
         $fbc = $cm->getCookie("_fbc");
         $fbp = $cm->getCookie("_fbp");

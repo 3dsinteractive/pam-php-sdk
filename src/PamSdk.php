@@ -9,7 +9,6 @@ class PamSdk
 {   
     private $config = [];
     private $baseApi;
-    private $frontendDomain = "";
     private $publicDBAlias = "default";
     private $trackerAPI;
 
@@ -23,13 +22,9 @@ class PamSdk
                 case "publicDBAlias":
                     $this->publicDBAlias = $value;
                     break;
-                case "frontendDomain":
-                    $this->frontendDomain = rtrim($value, '/');
-                    break;
             }
         }
-        $this->trackerAPI = new TrackerAPI($this->baseApi, $this->publicDBAlias, $this->frontendDomain);
-
+        $this->trackerAPI = new TrackerAPI($this->baseApi, $this->publicDBAlias);
     }
     
     public function postTracker($event, $data)
