@@ -7,21 +7,33 @@ use Pam\api\TrackerAPI;
 
 class PamSdk
 {   
-    
-    private $pamEndpoint;
+    private $config = [];
+    private $baseApi;
+    private $frontendDomain = "";
+    private $publicDBAlias = "default";
     private $trackerAPI;
-    private $frontendDomain;
 
-    public function __construct($pamEndpoint, $frontendDomain = "")
+    public function __construct($config)
     {
-        $this->pamEndpoint = rtrim($pamEndpoint, '/');
-        $this->frontendDomain = rtrim($frontendDomain, '/');
-        $this->trackerAPI = new TrackerAPI($this->pamEndpoint, $this->frontendDomain);
+        foreach ($config as $key => $value) {
+            switch ($key) {
+                case "baseApi":
+                    $this->baseApi = rtrim($value, '/');
+                    break;
+                case "publicDBAlias":
+                    $this->publicDBAlias = $value;
+                    break;
+                case "frontendDomain":
+                    $this->frontendDomain = rtrim($value, '/');
+                    break;
+            }
+        }
+        $this->trackerAPI = new TrackerAPI($this->baseApi, $this->publicDBAlias, $this->frontendDomain);
 
     }
     
-    public function postTracker($event, $databaseAlias, $data)
+    public function postTracker($event, $data)
     {
-        return $this->trackerAPI->postTracker($event, $databaseAlias, $data);
+        return $this->trackerAPI->postTracker($event, $data);
     }
 }

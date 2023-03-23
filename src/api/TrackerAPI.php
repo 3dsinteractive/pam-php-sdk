@@ -7,17 +7,19 @@ require_once dirname(__FILE__) . '/../cookies/CookieManager.php';
 
 class TrackerAPI
 {
-    private $pamEndpoint;
+    private $baseApi;
     private $frontendDomain;
+    private $publicDBAlias;
     
 
-    public function __construct($pamEndpoint, $frontendDomain = "")
+    public function __construct($baseApi, $publicDBAlias, $frontendDomain = "")
     {
-        $this->pamEndpoint = rtrim($pamEndpoint, '/');
+        $this->baseApi = rtrim($baseApi, '/');
+        $this->publicDBAlias = $publicDBAlias;
         $this->frontendDomain = rtrim($frontendDomain, '/');
     }
     
-    public function postTracker($event, $databaseAlias, $data)
+    public function postTracker($event, $data)
     {
         $cookieManager = "Pam\\cookies\\CookieManager";
         $origin = "";
@@ -46,7 +48,7 @@ class TrackerAPI
             "platform" => "PHP SDK",
             "page_url" => $url,
             "form_fields" => [
-                "_database"=> $databaseAlias,
+                "_database"=> $this->publicDBAlias,
             ]
         ];
         if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
@@ -73,7 +75,7 @@ class TrackerAPI
             }
         }
 
-        $url = "$this->pamEndpoint/trackers/events";
+        $url = "$this->baseApi/trackers/events";
         $headers = [
             'Content-Type: application/json'
         ];
